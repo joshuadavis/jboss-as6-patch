@@ -6,12 +6,14 @@
 
     <parent>
         <artifactId>jboss-as6-patch</artifactId>
-        <groupId>org.yajul</groupId>
+        <groupId>org.yajul.jboss</groupId>
         <version>1.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>dist-assembly</artifactId>
+    <artifactId>jboss-as-distribution</artifactId>
+    <version>6.0.0.P1</version>
+
     <packaging>pom</packaging>
     <description>This is the module that actually builds the distribution with the assembly plugin.</description>
 
@@ -24,7 +26,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.12</version>
+            <version>${version.mysql}</version>
         </dependency>
     </dependencies>
 
@@ -46,7 +48,7 @@
                                 <artifactItem>
                                     <groupId>org.jboss.jbossas</groupId>
                                     <artifactId>jboss-as-distribution</artifactId>
-                                    <version>${version.jboss_60}</version>
+                                    <version>${version.jboss6}</version>
                                     <type>zip</type>
                                 </artifactItem>
                             </artifactItems>

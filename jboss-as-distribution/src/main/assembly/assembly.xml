@@ -17,6 +17,8 @@
                 <exclude>bin/*.sh</exclude>
                 <!-- Skip patched libraries -->
                 <exclude>lib/jboss-logmanager.jar</exclude>
+                <!-- Skip patched configs, they will be handled by other fileSets -->
+                <exclude>server/default/**</exclude>
             </excludes>
         </fileSet>
 
@@ -30,31 +32,35 @@
             </includes>
         </fileSet>
 
-        <!-- Copy the base config, exclude any files we want to overwrite -->
+        <!-- Copy additional shell scripts -->
         <fileSet>
-            <directory>${jboss.unpack.dir}/server/${config.base}</directory>
-            <outputDirectory>server/${config.dest}</outputDirectory>
+            <directory>${basedir}/src/main/resources/bin</directory>
+            <outputDirectory>bin</outputDirectory>
+            <fileMode>755</fileMode>
+        </fileSet>
+
+        <!-- ***** server/default ***** -->
+
+        <!-- Copy the default config, exclude any files we want to overwrite -->
+        <fileSet>
+            <directory>${jboss.unpack.dir}/server/default</directory>
+            <outputDirectory>server/default</outputDirectory>
             <fileMode>644</fileMode>
             <excludes>
-                <!--- Make sure to exclude everything that will be overwritten! -->
+                <!-- Exclude what we don't want -->
                 <exclude>deploy/hsqldb-ds.xml</exclude>
+                <!--- Make sure to exclude everything that will be overwritten! -->
                 <exclude>deploy/jboss-logging.xml</exclude>
                 <exclude>conf/login-config.xml</exclude>
+                <exclude>deployers/jboss-logging.deployer/META-INF/logmanager-jboss-beans.xml</exclude>
             </excludes>
         </fileSet>
 
         <!-- Copy the new config files from the resource directory -->
         <fileSet>
             <directory>${basedir}/src/main/resources/server</directory>
-            <outputDirectory>server/${config.dest}</outputDirectory>
+            <outputDirectory>server/default</outputDirectory>
             <fileMode>644</fileMode>
-        </fileSet>
-
-        <!-- Copy shell scripts -->
-        <fileSet>
-            <directory>${basedir}/src/main/resources/bin</directory>
-            <outputDirectory>bin</outputDirectory>
-            <fileMode>755</fileMode>
         </fileSet>
 
     </fileSets>
