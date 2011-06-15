@@ -40,20 +40,6 @@
         <relativePath/>
     </parent>
 
-    <distributionManagement>
-        <repository>
-            <id>parity.releases</id>
-            <name>Parity Maven Release Repository</name>
-            <url>http://artifactory/artifactory/libs-releases-local</url>
-        </repository>
-        <snapshotRepository>
-            <id>parity.snapshots</id>
-            <name>Parity Maven Snapshot Repository</name>
-            <url>http://artifactory/artifactory/libs-snapshots-local</url>
-            <uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>
-    </distributionManagement>
-
     <dependencies>
         <dependency>
             <groupId>org.testng</groupId>
