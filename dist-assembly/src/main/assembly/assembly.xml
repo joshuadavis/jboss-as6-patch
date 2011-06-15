@@ -1,0 +1,79 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+    <id>dist</id>
+    <formats>
+        <format>tar.gz</format>
+        <!--<format>dir</format>-->
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <fileSets>
+        <!-- Copy the base files... -->
+        <fileSet>
+            <directory>${jboss.unpack.dir}</directory>
+            <outputDirectory>/</outputDirectory>
+            <excludes>
+                <!-- Skip shell scripts, we'll make them executable later -->
+                <exclude>bin/*.sh</exclude>
+                <!-- Skip patched libraries -->
+                <exclude>lib/jboss-logmanager.jar</exclude>
+            </excludes>
+        </fileSet>
+
+        <!-- Copy the shell scripts with executable mode -->
+        <fileSet>
+            <directory>${jboss.unpack.dir}</directory>
+            <outputDirectory>/</outputDirectory>
+            <fileMode>755</fileMode>
+            <includes>
+                <include>bin/*.sh</include>
+            </includes>
+        </fileSet>
+
+        <!-- Copy the base config, exclude any files we want to overwrite -->
+        <fileSet>
+            <directory>${jboss.unpack.dir}/server/${config.base}</directory>
+            <outputDirectory>server/${config.dest}</outputDirectory>
+            <fileMode>644</fileMode>
+            <excludes>
+                <!--- Make sure to exclude everything that will be overwritten! -->
+                <exclude>deploy/hsqldb-ds.xml</exclude>
+                <exclude>deploy/jboss-logging.xml</exclude>
+                <exclude>conf/login-config.xml</exclude>
+            </excludes>
+        </fileSet>
+
+        <!-- Copy the new config files from the resource directory -->
+        <fileSet>
+            <directory>${basedir}/src/main/resources/server</directory>
+            <outputDirectory>server/${config.dest}</outputDirectory>
+            <fileMode>644</fileMode>
+        </fileSet>
+
+        <!-- Copy shell scripts -->
+        <fileSet>
+            <directory>${basedir}/src/main/resources/bin</directory>
+            <outputDirectory>bin</outputDirectory>
+            <fileMode>755</fileMode>
+        </fileSet>
+
+    </fileSets>
+
+    <dependencySets>
+        <dependencySet>
+            <includes>
+                <include>mysql:mysql-connector-java:*</include>
+            </includes>
+            <outputDirectory>/common/lib</outputDirectory>
+        </dependencySet>
+        <!-- Patched libraries -->
+
+        <dependencySet>
+            <includes>
+                <include>org.jboss.logmanager:jboss-logmanager:*</include>
+            </includes>
+            <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+            <outputDirectory>/lib</outputDirectory>
+        </dependencySet>
+    </dependencySets>
+</assembly>
