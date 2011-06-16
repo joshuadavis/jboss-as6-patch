@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ===================================================================== -->
+<!--                                                                       -->
+<!--  Logging System Configuration                                         -->
+<!--                                                                       -->
+<!-- ===================================================================== -->
+
+<logging xmlns="urn:jboss:logging:6.0" xmlns:b="urn:jboss:bean-deployer:2.0" context="app">
+
+    <define-context name="app"/>
+
+    <!-- ================================= -->
+    <!-- Preserve messages in a local file -->
+    <!-- ================================= -->
+
+    <!-- A time/date based rolling handler -->
+
+    <periodic-rotating-file-handler
+            file-name="${jboss.server.log.dir}/app-specific.log"
+            name="FILE"
+            autoflush="true"
+            append="true"
+            suffix=".yyyy-MM-dd">  <!-- To roll over at the top of each hour, use ".yyyy-MM-dd-HH" instead -->
+
+        <error-manager>
+            <only-once/>
+        </error-manager>
+
+        <formatter>
+            <!-- To revert back to simple stack traces without JAR versions, change "%E" to "%e" below. -->
+            <!-- Uncomment this to get the class name in the log as well as the category
+            <pattern-formatter pattern="%d %-5p [%c] %C{1} (%t) %s%E%n"/>
+            -->
+            <!-- Uncomment this to log without the class name in the log -->
+            <pattern-formatter pattern="%d %-5p [%c] (%t) %s%E%n"/>
+        </formatter>
+    </periodic-rotating-file-handler>
+
+    <async-handler name="ASYNC">
+        <error-manager>
+            <only-once/>
+        </error-manager>
+
+        <sub-handlers>
+            <handler-ref name="FILE"/>
+        </sub-handlers>
+    </async-handler>
+
+
+    <!-- =============================================== -->
+    <!-- Limit categories                                -->
+    <!-- if enabling "trace" at root logger level,       -->
+    <!-- use limit category settings to disable trace    -->
+    <!-- for packages that you don't want to trace       -->
+    <!-- =============================================== -->
+
+    <!-- Limit the org.apache category to INFO as its DEBUG is verbose -->
+    <logger category="org.apache">
+        <level name="INFO"/>
+    </logger>
+
+    <!-- Limit the jacorb category to WARN as its INFO is verbose -->
+    <logger category="jacorb">
+        <level name="WARN"/>
+    </logger>
+
+    <!-- Limit JSF to INFO as its FINE is verbose -->
+    <logger category="javax.enterprise.resource.webcontainer.jsf">
+        <level name="INFO"/>
+    </logger>
+
+    <!-- Limit the org.jgroups category to WARN as its INFO is verbose -->
+    <logger category="org.jgroups">
+        <level name="WARN"/>
+    </logger>
+
+    <!-- Limit the org.quartz category to INFO as its DEBUG is verbose -->
+    <logger category="org.quartz">
+        <level name="INFO"/>
+    </logger>
+
+    <!-- Limit the com.sun category to INFO as its FINE is verbose -->
+    <logger category="com.sun">
+        <level name="INFO"/>
+    </logger>
+
+    <!-- Limit the sun category to INFO as its FINE is verbose -->
+    <logger category="sun">
+        <level name="INFO"/>
+    </logger>
+
+    <!-- Limit the javax.xml.bind category to INFO as its FINE is verbose -->
+    <logger category="javax.xml.bind">
+        <level name="INFO"/>
+    </logger>
+
+    <!-- Limit the springframework category to WARN-->
+    <logger category="org.springframework">
+        <level name="WARN"/>
+    </logger>
+
+
+    <!-- Limit the JSR77 categories -->
+    <logger category="org.jboss.management">
+        <level name="INFO"/>
+    </logger>
+
+    <!-- Limit the verbose facelets compiler -->
+    <!-- Also suppress error with legacy facelets (JBAS-7600) -->
+    <logger category="facelets.compiler">
+        <level name="WARN"/>
+        <filter>
+            <not>
+                <match pattern="Error\sLoading\sLibrary.*jsf-libs/jsf-impl"/>
+            </not>
+        </filter>
+    </logger>
+
+    <!-- Limit the org.jboss.serial (jboss-serialization) to INFO as its DEBUG is verbose -->
+    <logger category="org.jboss.serial">
+        <level name="INFO"/>
+    </logger>
+
+    <!-- Reduce org.mc4j stuff in the logs -->
+    <logger category="org.mc4j">
+        <level name="WARN"/>
+    </logger>
+
+    <!-- This is a temporary workaround for https://jira.jboss.org/jira/browse/EMBJOPR-280 and
+should be removed once that bug if fixed in the bundled admin-console war. -->
+    <logger category="org.rhq.plugins.jbossas5.ApplicationServerComponent">
+        <level name="FATAL"/>
+    </logger>
+
+    <!-- ======================= -->
+    <!-- Setup the Root category -->
+    <!-- ======================= -->
+
+    <root-logger>
+        <!-- Set the root logger priority via a system property, with a default value. -->
+        <level name="${jboss.server.log.threshold:INFO}"/>
+        <handlers>
+            <handler-ref name="ASYNC"/>
+        </handlers>
+    </root-logger>
+
+</logging>

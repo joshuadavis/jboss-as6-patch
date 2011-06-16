@@ -62,28 +62,66 @@
         </dependency>
 
         <dependency>
-            <groupId>org.jboss.jbossas</groupId>
-            <artifactId>jboss-server-manager</artifactId>
-            <version>1.0.4.Final</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jul-to-slf4j</artifactId>
+            <version>${version.slf4j}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>${version.testng}</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.1</version>
             <scope>test</scope>
         </dependency>
 
-<!--
+
+        <dependency>
+            <groupId>org.jboss.arquillian</groupId>
+            <artifactId>arquillian-junit</artifactId>
+            <version>${version.arquillian}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-jbossas-managed-6</artifactId>
+            <version>${version.arquillian}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.jbossas</groupId>
+            <artifactId>jboss-server-manager</artifactId>
+            <version>1.0.3.GA</version>
+        </dependency>
+
         <dependency>
             <groupId>org.jboss.jbossas</groupId>
             <artifactId>jboss-as-client</artifactId>
             <version>${version.jboss6}</version>
             <type>pom</type>
         </dependency>
--->
 
+        <dependency>
+            <groupId>org.jboss.ejb3</groupId>
+            <artifactId>jboss-ejb3-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.yajul.arquillian</groupId>
+            <artifactId>arq-helpers</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging</artifactId>
+            <version>${version.jboss-logging}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>

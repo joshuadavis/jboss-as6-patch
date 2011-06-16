@@ -15,6 +15,7 @@
         <version.slf4j>1.5.10</version.slf4j>
         <version.log4j>1.2.15</version.log4j>
         <version.jboss6>6.0.0.Final</version.jboss6>
+        <version.jboss-logging>3.0.0.Beta4</version.jboss-logging>
         <version.mysql>5.1.12</version.mysql>
         <version.testng>5.14</version.testng>
         <version.jboss6.patched>6.0.0.P1</version.jboss6.patched>
@@ -37,5 +38,6 @@
         <module>jboss-logmanager</module>
         <module>jboss-as-distribution</module>
         <module>jboss-as6-test</module>
+        <module>arq-helpers</module>
     </modules>
 </project>

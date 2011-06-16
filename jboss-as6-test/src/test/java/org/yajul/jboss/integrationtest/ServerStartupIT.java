@@ -1,14 +1,26 @@
 package org.yajul.jboss.integrationtest;
 
-import org.jboss.jbossas.servermanager.Server;
-import org.jboss.jbossas.servermanager.ServerManager;
+import org.jboss.arquillian.api.Deployment;
+import org.jboss.arquillian.api.RunAsClient;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.NamedAsset;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.jboss.shrinkwrap.impl.base.asset.ClassLoaderAsset;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.slf4j.bridge.SLF4JBridgeHandler;
+import org.yajul.arquillian.NamedClassLoaderAsset;
+import org.yajul.jboss.ejb.HelloWorld;
+import org.yajul.jboss.ejb.HelloWorldBean;
 
+import javax.ejb.EJB;
 import java.io.File;
-import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Test starting up the patched JBoss AS server.
@@ -18,38 +30,37 @@ import java.io.IOException;
  * Date: 6/16/11
  * Time: 12:00 AM
  */
-@Test
-public class ServerStartupIT {
+@RunWith(Arquillian.class)
+public class ServerStartupIT
+{
     private static final Logger log = LoggerFactory.getLogger(ServerStartupIT.class);
-    private ServerManager serverManager =  new ServerManager();
 
-    @BeforeClass
-    public void setup()
+    @EJB
+    private HelloWorld helloWorld;
+
+    @Deployment(testable = true)
+    public static JavaArchive createDeployment()
     {
-        File javaHomeDir = requireEnvVarDir("JAVA_HOME");
-        serverManager.setJavaHome(javaHomeDir.getAbsolutePath());
-        File jbossHomeDir = requireEnvVarDir("JBOSS_HOME");
-        log.info("Setting JBoss Home to " + javaHomeDir.getAbsolutePath());
-        serverManager.setJbossHome(jbossHomeDir.getAbsolutePath());
+        return ShrinkWrap.create(JavaArchive.class, "server-startup.jar")
+                .add(new NamedClassLoaderAsset("jboss-logging.xml", "test-jboss-logging.xml"))
+                .addClasses(HelloWorld.class, HelloWorldBean.class);
     }
 
-    public void testDefaultStartup() throws IOException {
-        final String config = "default";
+    @Test
+    public void sayHello()
+    {
+        log.info("calling sayHello()...");
+        helloWorld.sayHello();
+    }
 
-        String serverName = config + "-server";
-
-        Server defaultServer = new Server();
-
-        defaultServer.setName(serverName);
-        defaultServer.setConfig(config);
-
-        serverManager.addServer(defaultServer);
-
-        log.info("Starting...");
-        serverManager.startServer(serverName);
-
-        log.info("Stopping...");
-        serverManager.stopServer(serverName);
+    @Test
+    @RunAsClient
+    public void checkLogFiles()
+    {
+        log.info("Looking for log files...");
+        File jbossHome = requireEnvVarDir("JBOSS_HOME");
+        File serverLog = new File(jbossHome,"server/default/log/server.log");
+        Assert.assertTrue(serverLog.exists() && serverLog.isFile());
     }
 
     private File requireEnvVarDir(String envVarName)
