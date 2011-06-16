@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/dist-assembly/jboss-as-distribution.iml" filepath="$PROJECT_DIR$/dist-assembly/jboss-as-distribution.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jboss-as-distribution/jboss-as-distribution.iml" filepath="$PROJECT_DIR$/jboss-as-distribution/jboss-as-distribution.iml" />
       <module fileurl="file://$PROJECT_DIR$/jboss-as6-patch.iml" filepath="$PROJECT_DIR$/jboss-as6-patch.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jboss-as6-test/jboss-as6-test.iml" filepath="$PROJECT_DIR$/jboss-as6-test/jboss-as6-test.iml" />
       <module fileurl="file://$PROJECT_DIR$/jboss-logmanager/jboss-logmanager.iml" filepath="$PROJECT_DIR$/jboss-logmanager/jboss-logmanager.iml" />
     </modules>
   </component>
